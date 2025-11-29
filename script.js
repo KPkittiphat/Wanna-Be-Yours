@@ -19,28 +19,10 @@ window.requestAnimationFrame =
         })();
 window.isDevice = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(((navigator.userAgent || navigator.vendor || window.opera)).toLowerCase()));
 var loaded = false;
-var audio;
 var init = function () {
     if (loaded) return;
     loaded = true;
     
-    // สร้าง audio object
-    audio = new Audio('sounds/wanna.mp3');
-    audio.loop = true;
-    audio.volume = 0.5;
-
-    // เล่นเพลงอัตโนมัติ + ปลด mute เมื่อผู้ใช้คลิก
-    audio.play().catch(function (err) {
-        console.log('ต้องคลิกเพื่อเล่นเพลง:', err);
-        // ถ้าไม่สามารถเล่นอัตโนมัติได้ ให้เล่นเมื่อคลิก
-        var startAudio = function () {
-            audio.play();
-            document.removeEventListener('click', startAudio);
-            document.removeEventListener('touchstart', startAudio);
-        };
-        document.addEventListener('click', startAudio);
-        document.addEventListener('touchstart', startAudio);
-    });
 
     var mobile = window.isDevice;
     var koef = mobile ? 0.8 : 1;

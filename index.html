@@ -8,6 +8,19 @@
 </head>
 <body>
     <canvas id="heart"></canvas>
+    <audio id="bgAudio" autoplay muted loop>        <source src="sounds/wanna.mp3" type="audio/mpeg">
+   </audio>
+    <script src="script.js"></script>
+    <script>
+        window.onload = init;
+       document.addEventListener('click', function () {
+           var audio = document.getElementById('bgAudio');            audio.muted = false;
+       });
+        document.addEventListener('touchstart', function () {
+            var audio = document.getElementById('bgAudio');
+            audio.muted = false;
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
