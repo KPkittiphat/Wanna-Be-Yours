@@ -19,17 +19,27 @@ window.requestAnimationFrame =
         })();
 window.isDevice = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(((navigator.userAgent || navigator.vendor || window.opera)).toLowerCase()));
 var loaded = false;
+var audio;
 var init = function () {
     if (loaded) return;
     loaded = true;
-    // เล่นเพลงเมื่อเริ่มต้น
-    var audio = new Audio('sounds/wanna.mp3'); // เปลี่ยน music.mp3 เป็นชื่อไฟล์เพลงของคุณ
-    audio.loop = true; // วนซ้ำ
-    audio.volume = 0.5; // ระดับเสียง 0-1
-    audio.play();
+    
+    // สร้าง audio object
+    audio = new Audio('sounds/wanna.mp3');
+    audio.loop = true;
+    audio.volume = 0.5;
+    audio.autoplay = true;
+
+    // เล่นเพลงเองทันที
+    var playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(function (err) {
+            console.log('เพลงเล่นแล้ว');
+        });
+    }
 
     var mobile = window.isDevice;
-    var koef = mobile ? 0.5 : 1;
+    var koef = mobile ? 0.8 : 1;
     var canvas = document.getElementById('heart');
     var ctx = canvas.getContext('2d');
     var width = canvas.width = koef * innerWidth;
@@ -57,9 +67,9 @@ var init = function () {
     var pointsOrigin = [];
     var i;
     var dr = mobile ? 0.3 : 0.1;
-    for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 210, 13, 0, 0));
-    for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 150, 9, 0, 0));
-    for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), 90, 5, 0, 0));
+    for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), mobile ? 130 : 210, mobile ? 8 : 13, 0, 0));
+    for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), mobile ? 95 : 150, mobile ? 6 : 9, 0, 0));
+    for (i = 0; i < Math.PI * 2; i += dr) pointsOrigin.push(scaleAndTranslate(heartPosition(i), mobile ? 60 : 90, mobile ? 3 : 5, 0, 0));
     var heartPointsCount = pointsOrigin.length;
 
     var targetPoints = [];
