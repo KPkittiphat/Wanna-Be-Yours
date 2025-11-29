@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>Wanna Be Yours❤️</title>
-</head>
-<body>
+  </head>
+  <body>
     <canvas id="heart"></canvas>
-    <audio id="bgAudio" autoplay muted loop>        <source src="sounds/wanna.mp3" type="audio/mpeg">
-   </audio>
+    <audio id="bgAudio" autoplay muted loop>
+      <source src="sounds/wanna.mp3" type="audio/mpeg" />
+    </audio>
     <script src="script.js"></script>
     <script>
-        window.onload = init;
-       document.addEventListener('click', function () {
-           var audio = document.getElementById('bgAudio');            audio.muted = false;
-       });
-        document.addEventListener('touchstart', function () {
-            var audio = document.getElementById('bgAudio');
-            audio.muted = false;
-        });
+      window.onload = init;
+      document.addEventListener("click", function () {
+        var audio = document.getElementById("bgAudio");
+        audio.muted = false;
+      });
+      document.addEventListener("touchstart", function () {
+        var audio = document.getElementById("bgAudio");
+        audio.muted = false;
+      });
     </script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

@@ -75,13 +75,71 @@ var init = function () {
     var messageFade = 1300; // ระยะเวลา fade-in (มิลลิวินาที)
     var holdDuration = 21000; 
 
-    // ข้อความที่จะขึ้นตรงกลางหัวใจ (แก้เป็นข้อความที่ต้องการ)
-    var messageText = "I Wanna Be Yours";
+    // จัดการเสียงจาก <audio id="bgAudio"> (index.html)
+    var audio = document.getElementById('bgAudio') || new Audio('sounds/wanna.mp3');
+    audio.loop = true;
+    audio.volume = 0.6;
+
+    // อาเรย์เนื้อเพลง (แต่ละบรรทัด) — แก้ข้อความได้ตามต้องการ
+    var lyricsLines = [
+        "Wanna be your vacuum cleaner",
+        "(Wanna be yours)",
+        "Breathing in your dust",
+        "(Wanna be yours)",
+        "I wanna be your Ford Cortina",
+        "(Wanna be yours)",
+        "I'll never rust",
+        "(Wanna be yours)",
+        "I just wanna be yours",
+        "(Wanna be yours)",
+        "I just wanna be yours",
+        "(Wanna be yours)",
+        "I just wanna be yours",
+        "(Wanna be yours)"
+    ];
+
+    // ข้อความที่จะขึ้นตรงกลางหัวใจ (จะถูกอัปเดตจากเพลง)
+    var messageText = lyricsLines[0];
     var messageColor = "rgba(255,255,255,0.95)";
     var messageFontFamily = "Arial, sans-serif";
 
-    // สีของธีมหัวใจ (เปลี่ยนได้)
+    // สีธีมหัวใจ (แก้ค่า hue ตามต้องการ)
     var heartHue = 200;
+    
+    // ฟังก์ชันช่วย: คืนข้อความตามเวลาของเพลง
+    function updateMessageFromAudio() {
+        if (!audio) return;
+        var t = audio.currentTime || 0;
+        
+        var timestamps = [
+            { time: 0,    text: "Wanna be your vacuum cleaner" },
+            { time: 5,    text: "(Wanna be yours)" },
+            { time: 6.5,    text: "Breathing in your dust" },
+            { time: 8,  text: "(Wanna be yours)" },
+            { time: 9.5,  text: "I wanna be your Ford Cortina" },
+            { time: 11.5, text: "(Wanna be yours)" },
+            { time: 13.5, text: "I'll never rust" },
+            { time: 15,   text: "(Wanna be yours)" },
+            { time: 16.5,   text: "I just wanna be yours" },
+            { time: 18.5, text: "(Wanna be yours)" },
+            { time: 20,   text: "I just wanna be yours" },
+            { time: 22.5, text: "(Wanna be yours)" },
+            { time: 23.5,   text: "I just wanna be yours" },
+            { time: 25.5, text: "(Wanna be yours)" }
+        ];
+        
+        var actualTime = t;
+        if (audio.duration && !isNaN(audio.duration) && audio.duration > 0) {
+            actualTime = t % audio.duration;
+        }
+        
+        for (var j = timestamps.length - 1; j >= 0; j--) {
+            if (actualTime >= timestamps[j].time) {
+                 messageText = timestamps[j].text;
+                 break;
+             }
+         }
+     }
 
     var createParticles = function () {
         e.length = 0;
@@ -118,8 +176,11 @@ var init = function () {
 
         pulse(pulseScale, pulseScale);
 
+        // อัปเดตข้อความจากเสียงเพลงก่อนวาด
+        updateMessageFromAudio();
+
         // เมื่อหัวใจแสดงเต็ม (pulseScale ใกล้ 1) ให้เริ่ม hold 20 วินาที
-        if (!hold && pulseScale > 0.99) {
+         if (!hold && pulseScale > 0.99) {
             hold = true;
             holdUntil = now + holdDuration;
             holdStart = now; // เริ่มเวลา fade-in ตั้งแต่เดี๋ยวนี้
@@ -210,8 +271,8 @@ var init = function () {
             grad.addColorStop(0.5, "hsla(" + heartHue + ",60%,85%,1)");
             grad.addColorStop(1, "hsla(" + (heartHue - 10) + ",60%,70%,1)");
 
-            // ปรับขนาดฟอนต์: บนคอมให้ย่อครึ่งเพื่อให้ขนาดใกล้เคียงเวอร์ชันมือถือ
-            var fontSize = Math.max(14, Math.min(width, height) / (mobile ? 12 : 24));
+            // ปรับขนาดฟอนต์: ลดขนาดบนเดสก์ท็อปให้เล็กลง (ปรับตัวหารตามต้องการ)
+            var fontSize = Math.max(1, Math.min(width, height) / (mobile ? 24 : 29));
             ctx.font = fontSize + "px " + messageFontFamily;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
